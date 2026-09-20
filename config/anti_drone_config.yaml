@@ -1,0 +1,30 @@
+# Anti-Drone Tracking and Countermeasure Configuration
+
+# Two-level tracking thresholds
+coarse_to_fine_threshold: 0.7
+fine_to_coarse_threshold: 0.3
+
+# Camera field of view (radians)
+fov_x: 1.047
+fov_y: 0.785
+
+# Gimbal position in world coordinates (m)
+gimbal_x: 0.0
+gimbal_y: 0.0
+gimbal_z: 1.5
+
+# Servo feedforward
+feedforward_gain: 0.8
+spot_correction_gain: 0.5
+
+# Laser control
+arm_threshold: 0.8
+arm_frames: 10
+max_emit_ms: 5000
+cooldown_ms: 1000
+effective_threshold_ms: 3000
+
+# Output
+publish_udp: false
+udp_host: "127.0.0.1"
+udp_port: 8803
