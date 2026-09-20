@@ -1,7 +1,9 @@
 // main.cpp - LiDAR perception demo with synthetic scene and PCL visualization
 #include "lidar_perception.h"
 
+#ifdef HAS_PCL_VISUALIZATION
 #include <pcl/visualization/pcl_visualizer.h>
+#endif
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
 
@@ -69,7 +71,8 @@ int main(int argc, char** argv) {
     }
     perception.init();
 
-    // Create PCL visualizer
+    // Create PCL visualizer (optional)
+#ifdef HAS_PCL_VISUALIZATION
     pcl::visualization::PCLVisualizer::Ptr viewer;
     bool use_viz = perception.config().visualization_enabled;
     if (use_viz) {
@@ -79,6 +82,10 @@ int main(int argc, char** argv) {
         viewer->initCameraParameters();
         viewer->setCameraPosition(0, -20, 15, 0, 0, 0, 0, 0, 1);
     }
+#else
+    bool use_viz = false;
+    RM_LOG_INFO("PCL visualization not available, running headless");
+#endif
 
     std::mt19937 rng(42);
     int frame = 0;
@@ -101,6 +108,7 @@ int main(int argc, char** argv) {
         }
 
         // Visualize
+#ifdef HAS_PCL_VISUALIZATION
         if (use_viz && viewer) {
             viewer->removeAllPointClouds();
             viewer->removeAllShapes();
@@ -133,6 +141,9 @@ int main(int argc, char** argv) {
             viewer->spinOnce(30);
             if (viewer->wasStopped()) break;
         }
+#else
+        (void)use_viz;
+#endif
 
         frame++;
         std::this_thread::sleep_for(std::chrono::milliseconds(100));

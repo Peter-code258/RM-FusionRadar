@@ -70,16 +70,19 @@ void test_ground_removal() {
     lp.init();
 
     PointCloud in;
-    // Ground points at z=0
+    // Ground points at z=0.15 (above z_min)
     for (int i = 0; i < 500; ++i) {
         in.points.emplace_back(
             static_cast<float>(i % 20) * 0.5f - 5.0f,
             static_cast<float>(i / 20) * 0.5f - 5.0f,
-            0.0f, 10.0f, 0);
+            0.15f, 10.0f, 0);
     }
-    // A target above ground
-    for (int i = 0; i < 100; ++i) {
-        in.points.emplace_back(2.0f, 2.0f, 0.5f + (i % 10) * 0.05f, 200.0f, 1);
+    // A target above ground, spread in x,y to survive voxel
+    for (int i = 0; i < 200; ++i) {
+        float dx = (i % 10) * 0.04f - 0.18f;
+        float dy = ((i / 10) % 10) * 0.04f - 0.18f;
+        float dz = (i / 100) * 0.1f;
+        in.points.emplace_back(2.0f + dx, 2.0f + dy, 0.6f + dz, 200.0f, 1);
     }
 
     PerceptionResult r = lp.process(in);
@@ -94,18 +97,24 @@ void test_tracking_stable_id() {
     lp.loadConfig("config/lidar_config.yaml");
     lp.init();
 
-    // Frame 1: one target
+    // Frame 1: one target, spread in x,y,z
     PointCloud f1;
-    for (int i = 0; i < 50; ++i) {
-        f1.points.emplace_back(1.0f, 3.0f, 0.5f + (i % 5) * 0.05f, 100.0f, 1);
+    for (int i = 0; i < 200; ++i) {
+        float dx = (i % 10) * 0.04f - 0.18f;
+        float dy = ((i / 10) % 10) * 0.04f - 0.18f;
+        float dz = (i / 100) * 0.1f;
+        f1.points.emplace_back(1.0f + dx, 3.0f + dy, 0.5f + dz, 100.0f, 1);
     }
     PerceptionResult r1 = lp.process(f1);
     uint32_t first_id = r1.targets.empty() ? 0 : r1.targets[0].id;
 
     // Frame 2: same target slightly moved
     PointCloud f2;
-    for (int i = 0; i < 50; ++i) {
-        f2.points.emplace_back(1.1f, 3.0f, 0.5f + (i % 5) * 0.05f, 100.0f, 1);
+    for (int i = 0; i < 200; ++i) {
+        float dx = (i % 10) * 0.04f - 0.18f;
+        float dy = ((i / 10) % 10) * 0.04f - 0.18f;
+        float dz = (i / 100) * 0.1f;
+        f2.points.emplace_back(1.1f + dx, 3.0f + dy, 0.5f + dz, 100.0f, 1);
     }
     PerceptionResult r2 = lp.process(f2);
     uint32_t second_id = r2.targets.empty() ? 0 : r2.targets[0].id;
