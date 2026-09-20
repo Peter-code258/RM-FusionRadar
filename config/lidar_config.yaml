@@ -1,0 +1,67 @@
+# LiDAR Perception Subsystem Configuration
+# All thresholds can be tuned without recompilation
+
+# Passthrough filter range (meters)
+passthrough:
+  x_min: -8.0
+  x_max: 8.0
+  y_min: -15.0
+  y_max: 15.0
+  z_min: 0.1
+  z_max: 2.0
+
+# Voxel downsampling
+voxel:
+  leaf_size: 0.05          # default voxel resolution (m)
+  leaf_size_far: 0.08      # relaxed resolution for distant points
+  far_distance_threshold: 15.0  # beyond this distance use leaf_size_far
+
+# RANSAC ground segmentation
+ground:
+  distance_threshold: 0.08  # inlier distance threshold (m)
+  max_iterations: 100       # RANSAC iterations
+  optimize_z_below: 0.5     # only fit plane on points with z < this value (speedup)
+
+# Euclidean clustering
+clustering:
+  base_radius: 0.35         # base search radius (m)
+  radius_gain: 0.012        # radius grows linearly with distance: base + gain*dist
+  min_cluster_size: 15      # minimum points per cluster
+  max_cluster_size: 800     # maximum points per cluster
+
+# Tracking (Hungarian + Kalman)
+tracking:
+  max_match_distance: 0.5   # gating distance for data association (m)
+  max_lost_frames: 3        # frames tolerated before track removal
+
+# Static obstacle filter
+static_obstacles:
+  enabled: true
+  # list of fixed obstacles: [x, y, z, radius, label]
+  obstacles:
+    - [0.0, 0.0, 0.0, 0.5, "origin_pillar"]
+
+# Multi-radar extrinsic calibration (4x4 transform: sensor -> world)
+# Used to unify point clouds from multiple radars before clustering
+multi_radar:
+  enabled: false
+  extrinsics:
+    - [1.0, 0.0, 0.0, 0.0,
+       0.0, 1.0, 0.0, 0.0,
+       0.0, 0.0, 1.0, 0.0,
+       0.0, 0.0, 0.0, 1.0]
+
+# Output
+output:
+  publish_udp: false
+  udp_host: "127.0.0.1"
+  udp_port: 8800
+
+# Visualization
+visualization:
+  enabled: true
+  window_name: "LiDAR Perception"
+  point_size: 2
+  background_r: 0.0
+  background_g: 0.0
+  background_b: 0.0
