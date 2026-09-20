@@ -1,0 +1,24 @@
+# SDR Software Radio Perception Subsystem Configuration
+
+# Byte order of incoming frames
+big_endian: false
+
+# CRC-16 verification
+verify_crc: true
+
+# Accept inverted sync word 0x55AA for anti-interference
+use_inverted_sync: true
+
+# UDP publishing to fusion center
+publish_udp: true
+udp_host: "127.0.0.1"
+udp_port: 8801
+
+# Kalman trajectory interpolation
+enable_interpolation: true
+input_rate_hz: 10
+output_rate_hz: 30
+
+# Channel scanner
+num_channels: 16
+samples_per_channel: 50
