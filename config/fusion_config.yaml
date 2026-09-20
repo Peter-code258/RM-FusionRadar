@@ -1,0 +1,32 @@
+# Multi-Sensor Fusion Center Configuration
+
+# Data association
+match_threshold: 1.0         # Hungarian matching distance threshold (m)
+confidence_threshold: 0.15   # remove targets below this confidence
+
+# Sensor health
+sensor_timeout_ms: 500       # sensor data timeout for fault detection
+
+# Dynamic weighted fusion by distance
+near_distance: 8.0
+far_distance: 15.0
+
+# Near range (<8m): vision-heavy
+near_vision_weight: 0.7
+near_radar_weight: 0.3
+
+# Mid range (8-15m): balanced
+mid_vision_weight: 0.5
+mid_radar_weight: 0.5
+
+# Far range (>15m): radar-heavy
+far_vision_weight: 0.2
+far_radar_weight: 0.8
+
+# SDR weight (always high for drift correction)
+sdr_weight: 0.9
+
+# UDP I/O
+udp_input_port: 8800
+udp_output_host: "127.0.0.1"
+udp_output_port: 8900
