@@ -57,14 +57,14 @@ public:
     void reset() {
         x_.fill(0.0f);
         // Initial covariance
-        P_.fill(0.0f);
+        for (auto& row : P_) row.fill(0.0f);
         for (int i = 0; i < 6; ++i) P_[i][i] = 1.0f;
         // Process noise
-        Q_.fill(0.0f);
+        for (auto& row : Q_) row.fill(0.0f);
         for (int i = 0; i < 3; ++i) Q_[i][i] = 0.01f;     // position noise
         for (int i = 3; i < 6; ++i) Q_[i][i] = 0.1f;      // velocity noise
         // Measurement noise
-        R_.fill(0.0f);
+        for (auto& row : R_) row.fill(0.0f);
         for (int i = 0; i < 3; ++i) R_[i][i] = 0.05f;
         initialized_ = false;
     }
@@ -174,10 +174,10 @@ public:
     bool initialized() const { return initialized_; }
 
 private:
-    float x_[6];
-    float P_[6][6];
-    float Q_[6][6];
-    float R_[3][3];
+    std::array<float, 6> x_;
+    std::array<std::array<float, 6>, 6> P_;
+    std::array<std::array<float, 6>, 6> Q_;
+    std::array<std::array<float, 3>, 3> R_;
     bool initialized_ = false;
 };
 

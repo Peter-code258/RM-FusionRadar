@@ -1,0 +1,24 @@
+# Monocular Vision Radar Configuration
+
+# Data association
+match_threshold: 1.0
+max_lost_frames: 10
+
+# Camera attitude monitoring
+attitude_threshold: 5.0
+
+# Distance compensation for long-range projection deviation
+distance_compensation: true
+comp_gain: 0.02
+
+# Camera intrinsics (will be overridden by calibration)
+camera_fx: 800.0
+camera_fy: 800.0
+camera_cx: 320.0
+camera_cy: 240.0
+distortion: [0.1, -0.05, 0.0, 0.0, 0.0]
+
+# Output
+publish_udp: false
+udp_host: "127.0.0.1"
+udp_port: 8802
